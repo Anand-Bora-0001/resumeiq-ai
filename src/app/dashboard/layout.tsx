@@ -139,7 +139,6 @@ export default function DashboardLayout({
           </button>
           <div className="flex items-center justify-between px-3">
             <UserButton
-              afterSignOutUrl="/"
               appearance={{
                 elements: {
                   avatarBox: "h-8 w-8",
@@ -220,7 +219,7 @@ export default function DashboardLayout({
           <div className="flex-1" />
           <div className="flex items-center gap-3 lg:hidden">
             <ThemeToggle />
-            <UserButton afterSignOutUrl="/" />
+            <UserButton />
           </div>
         </header>
 

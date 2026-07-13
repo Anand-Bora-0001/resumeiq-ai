@@ -1,12 +1,30 @@
-// Prisma Schema for ResumeIQ AI (SQLite Local Mode)
+// Prisma Schema for ResumeIQ AI (Supabase PostgreSQL)
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---- Enums ----
+
+enum Plan {
+  FREE
+  PRO
+}
+
+enum SubStatus {
+  active
+  canceled
+  incomplete
+  incomplete_expired
+  past_due
+  trialing
+  unpaid
 }
 
 // ---- Models ----
@@ -18,7 +36,7 @@ model User {
   firstName        String?
   lastName         String?
   imageUrl         String?
-  plan             String    @default("FREE")
+  plan             Plan      @default(FREE)
   stripeCustomerId String?   @unique
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
@@ -38,7 +56,7 @@ model Subscription {
   userId               String    @unique
   stripeSubscriptionId String    @unique
   stripePriceId        String
-  status               String
+  status               SubStatus
   currentPeriodStart   DateTime
   currentPeriodEnd     DateTime
   cancelAtPeriodEnd    Boolean   @default(false)

@@ -55,8 +55,9 @@ export async function POST(req: Request) {
     const validation = analyzeSchema.safeParse(body);
 
     if (!validation.success) {
+      const err = validation.error as any;
       return NextResponse.json(
-        { error: validation.error.errors[0]?.message || "Invalid input" },
+        { error: err.errors?.[0]?.message || "Invalid input" },
         { status: 400 }
       );
     }

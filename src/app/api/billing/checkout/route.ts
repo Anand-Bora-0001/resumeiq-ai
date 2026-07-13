@@ -34,14 +34,14 @@ export async function POST(req: Request) {
     await prisma.subscription.upsert({
       where: { userId: user.id },
       update: {
-        status: "ACTIVE",
+        status: "active",
         currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
       },
       create: {
         userId: user.id,
         stripeSubscriptionId: "mock_sub_" + Date.now(),
         stripePriceId: priceId,
-        status: "ACTIVE",
+        status: "active",
         currentPeriodStart: new Date(),
         currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       },

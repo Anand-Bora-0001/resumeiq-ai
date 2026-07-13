@@ -10,7 +10,8 @@ export function isPro(user: UserWithSubscription): boolean {
   if (user.plan === "PRO") return true;
   if (
     user.subscription &&
-    user.subscription.status === "ACTIVE" &&
+    (user.subscription.status === "active" ||
+      user.subscription.status === "trialing") &&
     new Date(user.subscription.currentPeriodEnd) > new Date()
   ) {
     return true;

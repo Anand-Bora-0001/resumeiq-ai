@@ -38,7 +38,7 @@ interface ReviewDetailProps {
   isPro: boolean;
 }
 
-type TabKey = "overview" | "keywords" | "suggestions" | "rewrite" | "interview";
+type TabKey = "overview" | "keywords" | "diagram" | "suggestions" | "rewrite" | "interview";
 
 export function ReviewDetail({ review, isPro }: ReviewDetailProps) {
   const router = useRouter();

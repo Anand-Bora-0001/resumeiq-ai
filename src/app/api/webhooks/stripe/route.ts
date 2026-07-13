@@ -35,20 +35,20 @@ export async function POST(req: Request) {
   try {
     switch (event.type) {
       case "checkout.session.completed": {
-        const session = event.data.object as Stripe.Checkout.Session;
+        const session = event.data.object as any;
         const userId = session.metadata?.userId;
         const subscriptionId = session.subscription as string;
 
         if (!userId || !subscriptionId) break;
 
-        const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+        const subscription = await stripe.subscriptions.retrieve(subscriptionId) as any;
 
         await prisma.subscription.upsert({
           where: { userId },
           update: {
             stripeSubscriptionId: subscription.id,
             stripePriceId: subscription.items.data[0]?.price.id ?? "",
-            status: "ACTIVE",
+            status: "active",
             currentPeriodStart: new Date(subscription.current_period_start * 1000),
             currentPeriodEnd: new Date(subscription.current_period_end * 1000),
           },
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
             userId,
             stripeSubscriptionId: subscription.id,
             stripePriceId: subscription.items.data[0]?.price.id ?? "",
-            status: "ACTIVE",
+            status: "active",
             currentPeriodStart: new Date(subscription.current_period_start * 1000),
             currentPeriodEnd: new Date(subscription.current_period_end * 1000),
           },
@@ -87,12 +87,12 @@ export async function POST(req: Request) {
       }
 
       case "invoice.paid": {
-        const invoice = event.data.object as Stripe.Invoice;
+        const invoice = event.data.object as any;
         const subscriptionId = invoice.subscription as string;
 
         if (!subscriptionId) break;
 
-        const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+        const subscription = await stripe.subscriptions.retrieve(subscriptionId) as any;
         const dbSub = await prisma.subscription.findUnique({
           where: { stripeSubscriptionId: subscriptionId },
         });
@@ -101,7 +101,7 @@ export async function POST(req: Request) {
           await prisma.subscription.update({
             where: { stripeSubscriptionId: subscriptionId },
             data: {
-              status: "ACTIVE",
+              status: "active",
               currentPeriodStart: new Date(subscription.current_period_start * 1000),
               currentPeriodEnd: new Date(subscription.current_period_end * 1000),
             },
@@ -127,7 +127,7 @@ export async function POST(req: Request) {
       }
 
       case "customer.subscription.deleted": {
-        const subscription = event.data.object as Stripe.Subscription;
+        const subscription = event.data.object as any;
 
         const dbSub = await prisma.subscription.findUnique({
           where: { stripeSubscriptionId: subscription.id },
@@ -136,7 +136,7 @@ export async function POST(req: Request) {
         if (dbSub) {
           await prisma.subscription.update({
             where: { stripeSubscriptionId: subscription.id },
-            data: { status: "CANCELED" },
+            data: { status: "canceled" },
           });
 
           await prisma.user.update({
@@ -148,22 +148,22 @@ export async function POST(req: Request) {
       }
 
       case "customer.subscription.updated": {
-        const subscription = event.data.object as Stripe.Subscription;
+        const subscription = event.data.object as any;
 
         const dbSub = await prisma.subscription.findUnique({
           where: { stripeSubscriptionId: subscription.id },
         });
 
         if (dbSub) {
-          const status = subscription.status === "active" ? "ACTIVE" :
-                         subscription.status === "past_due" ? "PAST_DUE" :
-                         subscription.status === "canceled" ? "CANCELED" :
-                         subscription.status === "unpaid" ? "UNPAID" : "ACTIVE";
+          const status = subscription.status === "active" ? "active" :
+                         subscription.status === "past_due" ? "past_due" :
+                         subscription.status === "canceled" ? "canceled" :
+                         subscription.status === "unpaid" ? "unpaid" : "active";
 
           await prisma.subscription.update({
             where: { stripeSubscriptionId: subscription.id },
             data: {
-              status: status as "ACTIVE" | "CANCELED" | "PAST_DUE" | "UNPAID" | "TRIALING" | "INCOMPLETE",
+              status: status as any,
               stripePriceId: subscription.items.data[0]?.price.id ?? dbSub.stripePriceId,
               currentPeriodEnd: new Date(subscription.current_period_end * 1000),
               cancelAtPeriodEnd: subscription.cancel_at_period_end,

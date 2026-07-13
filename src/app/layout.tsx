@@ -48,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider appearance={{ baseTheme: dark }}>
+    <ClerkProvider appearance={({ baseTheme: dark } as any)}>
       <html lang="en" suppressHydrationWarning>
         <body className="min-h-screen antialiased">
           <ThemeProvider
