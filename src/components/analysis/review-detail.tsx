@@ -282,16 +282,16 @@ export function ReviewDetail({ review, isPro }: ReviewDetailProps) {
             <h3 className="text-xl font-bold text-foreground mb-8 text-center">AI-Generated Skill Constellation</h3>
             
             {/* Visual Skill Tree Diagram built with CSS */}
-            <div className="relative flex flex-col items-center justify-center py-12">
+            <div className="relative w-full min-h-[450px] flex items-center justify-center">
               
               {/* Background Connectors */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] border border-indigo-500/20 rounded-full opacity-50" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-[50%] border border-violet-500/20 rounded-full opacity-50" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[80%] border border-indigo-500/20 rounded-full opacity-30" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[50%] border border-violet-500/20 rounded-full opacity-30" />
               
               {/* Center Node (Role) */}
               <motion.div 
                 initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }}
-                className="z-10 bg-indigo-600 border-4 border-background w-32 h-32 rounded-full flex items-center justify-center shadow-lg shadow-indigo-500/50"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-indigo-600 border-4 border-background w-32 h-32 rounded-full flex items-center justify-center shadow-xl shadow-indigo-500/40"
               >
                 <div className="text-center">
                   <p className="font-bold text-white leading-tight">Full Stack</p>
@@ -300,40 +300,44 @@ export function ReviewDetail({ review, isPro }: ReviewDetailProps) {
               </motion.div>
 
               {/* Orbiting Nodes */}
-              <div className="absolute top-10 left-1/4 -translate-x-1/2 z-10 flex flex-col items-center">
-                <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="bg-emerald-500 w-16 h-16 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/30 mb-2 border-2 border-background">
+              {/* Top Left - Backend */}
+              <div className="absolute top-[15%] left-[20%] -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
+                <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.2 }} className="bg-emerald-500 w-20 h-20 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/30 mb-3 border-4 border-background">
                   <span className="font-bold text-white text-xs">Backend</span>
                 </motion.div>
-                <span className="text-[10px] bg-white/10 px-2 py-1 rounded-full text-white backdrop-blur-md border border-white/10">Python, FastAPI</span>
+                <span className="text-xs font-medium bg-background/80 px-3 py-1 rounded-full text-foreground border border-white/10 backdrop-blur-md">Python, FastAPI</span>
               </div>
 
-              <div className="absolute top-20 right-1/4 translate-x-1/2 z-10 flex flex-col items-center">
-                <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }} className="bg-blue-500 w-20 h-20 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 mb-2 border-2 border-background">
-                  <span className="font-bold text-white text-xs">Frontend</span>
+              {/* Top Right - Frontend */}
+              <div className="absolute top-[25%] right-[15%] translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
+                <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.3 }} className="bg-blue-500 w-24 h-24 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 mb-3 border-4 border-background">
+                  <span className="font-bold text-white text-sm">Frontend</span>
                 </motion.div>
-                <span className="text-[10px] bg-white/10 px-2 py-1 rounded-full text-white backdrop-blur-md border border-white/10">React, TypeScript</span>
+                <span className="text-xs font-medium bg-background/80 px-3 py-1 rounded-full text-foreground border border-white/10 backdrop-blur-md">React, TypeScript</span>
               </div>
 
-              <div className="absolute bottom-20 left-1/5 translate-x-1/4 z-10 flex flex-col items-center">
-                <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }} className="bg-orange-500 w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-orange-500/30 mb-2 border-2 border-background">
-                  <span className="font-bold text-white text-[10px]">Cloud</span>
+              {/* Bottom Left - Cloud */}
+              <div className="absolute bottom-[20%] left-[25%] -translate-x-1/2 translate-y-1/2 z-20 flex flex-col items-center">
+                <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.4 }} className="bg-orange-500 w-16 h-16 rounded-full flex items-center justify-center shadow-lg shadow-orange-500/30 mb-3 border-4 border-background">
+                  <span className="font-bold text-white text-xs">Cloud</span>
                 </motion.div>
-                <span className="text-[10px] bg-white/10 px-2 py-1 rounded-full text-white backdrop-blur-md border border-white/10">AWS, Docker</span>
+                <span className="text-xs font-medium bg-background/80 px-3 py-1 rounded-full text-foreground border border-white/10 backdrop-blur-md">AWS, Docker</span>
               </div>
 
-              <div className="absolute bottom-10 right-1/3 z-10 flex flex-col items-center">
-                <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }} className="bg-violet-500 w-16 h-16 rounded-full flex items-center justify-center shadow-lg shadow-violet-500/30 mb-2 border-2 border-background">
+              {/* Bottom Right - AI/ML */}
+              <div className="absolute bottom-[15%] right-[30%] translate-x-1/2 translate-y-1/2 z-20 flex flex-col items-center">
+                <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.5 }} className="bg-violet-500 w-20 h-20 rounded-full flex items-center justify-center shadow-lg shadow-violet-500/30 mb-3 border-4 border-background">
                   <span className="font-bold text-white text-xs">AI/ML</span>
                 </motion.div>
-                <span className="text-[10px] bg-white/10 px-2 py-1 rounded-full text-white backdrop-blur-md border border-white/10">Scikit-learn</span>
+                <span className="text-xs font-medium bg-background/80 px-3 py-1 rounded-full text-foreground border border-white/10 backdrop-blur-md">Scikit-learn</span>
               </div>
               
               {/* Decorative Lines (SVG) */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
-                <line x1="50%" y1="50%" x2="25%" y2="25%" stroke="rgba(255,255,255,0.1)" strokeWidth="2" strokeDasharray="4 4" />
-                <line x1="50%" y1="50%" x2="75%" y2="30%" stroke="rgba(255,255,255,0.1)" strokeWidth="2" strokeDasharray="4 4" />
-                <line x1="50%" y1="50%" x2="35%" y2="70%" stroke="rgba(255,255,255,0.1)" strokeWidth="2" strokeDasharray="4 4" />
-                <line x1="50%" y1="50%" x2="65%" y2="80%" stroke="rgba(255,255,255,0.1)" strokeWidth="2" strokeDasharray="4 4" />
+              <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
+                <line x1="50%" y1="50%" x2="20%" y2="15%" stroke="currentColor" className="text-indigo-500/20" strokeWidth="2" strokeDasharray="6 6" />
+                <line x1="50%" y1="50%" x2="85%" y2="25%" stroke="currentColor" className="text-indigo-500/20" strokeWidth="2" strokeDasharray="6 6" />
+                <line x1="50%" y1="50%" x2="25%" y2="80%" stroke="currentColor" className="text-indigo-500/20" strokeWidth="2" strokeDasharray="6 6" />
+                <line x1="50%" y1="50%" x2="70%" y2="85%" stroke="currentColor" className="text-indigo-500/20" strokeWidth="2" strokeDasharray="6 6" />
               </svg>
 
             </div>
