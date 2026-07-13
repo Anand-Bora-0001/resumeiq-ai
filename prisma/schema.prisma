@@ -1,0 +1,116 @@
+// Prisma Schema for ResumeIQ AI (SQLite Local Mode)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// ---- Models ----
+
+model User {
+  id               String    @id @default(cuid())
+  clerkId          String    @unique
+  email            String    @unique
+  firstName        String?
+  lastName         String?
+  imageUrl         String?
+  plan             String    @default("FREE")
+  stripeCustomerId String?   @unique
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  subscription Subscription?
+  reviews      Review[]
+  usageRecords UsageRecord[]
+  files        File[]
+  payments     Payment[]
+
+  @@index([clerkId])
+  @@index([email])
+}
+
+model Subscription {
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  stripeSubscriptionId String    @unique
+  stripePriceId        String
+  status               String
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  cancelAtPeriodEnd    Boolean   @default(false)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([stripeSubscriptionId])
+  @@index([userId])
+}
+
+model Review {
+  id             String   @id @default(cuid())
+  userId         String
+  fileName       String
+  fileUrl        String?
+  jobTitle       String?
+  jobDescription String
+  resumeText     String
+  overallScore   Int
+  atsScore       Int
+  grammarScore   Int
+  formattingScore Int
+  keywordScore   Int
+  analysisResult String
+  createdAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model UsageRecord {
+  id     String   @id @default(cuid())
+  userId String
+  date   DateTime @default(now())
+  count  Int      @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model File {
+  id        String   @id @default(cuid())
+  userId    String
+  fileName  String
+  fileType  String
+  fileSize  Int
+  url       String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  userId          String
+  stripePaymentId String   @unique
+  amount          Int
+  currency        String   @default("usd")
+  status          String
+  description     String?
+  createdAt       DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([stripePaymentId])
+}
