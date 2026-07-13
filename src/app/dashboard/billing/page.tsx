@@ -15,7 +15,9 @@ import {
 import { motion } from "framer-motion";
 import { getPlanFeatures } from "@/lib/subscription";
 
-export default function BillingPage() {
+import { Suspense } from "react";
+
+function BillingContent() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
@@ -229,5 +231,13 @@ export default function BillingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BillingPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-indigo-500" /></div>}>
+      <BillingContent />
+    </Suspense>
   );
 }
